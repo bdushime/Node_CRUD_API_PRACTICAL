@@ -8,5 +8,20 @@
     "id": 2,
     "task": "Watch movie",
     "status": "todo"
+  },
+  {
+    "id": 3,
+    "task": "Chicken",
+    "status": "Eat dinner"
+  },
+  {
+    "id": 4,
+    "task": "beef",
+    "status": "Eat dinner"
+  },
+  {
+    "id": 5,
+    "task": "fish",
+    "status": "Eat supper"
   }
 ]

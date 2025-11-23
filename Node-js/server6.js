@@ -71,7 +71,7 @@ const server = http.createServer((req,res)=>{
             res.end(JSON.stringify({message:'file not found'}))
             }
 
-            res.writeHead(404,{'Content-Type':'application/json'});
+            res.writeHead(200,{'Content-Type':'application/json'});
             res.end(JSON.stringify({message:'task added successfully',tasks}))
         })
         })
