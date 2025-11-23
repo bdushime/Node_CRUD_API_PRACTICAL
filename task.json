@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "task": "Learn Node",
+    "status": "doing"
+  },
+  {
+    "id": 2,
+    "task": "Watch movie",
+    "status": "todo"
+  }
+]
