@@ -4,8 +4,27 @@ import http from 'http'
 
 const PORT = 9000;
 
+//Middleware
+function logger(req,res){
+ console.log(`${req.method} ${req.url} --${new Date().toISOString()}`)
+}
+
+function  jsonMiddlewware(req,res){
+    if((req.method === 'POST' || req.method === 'PUT')&& 
+    req.headers['Content-Type'] !== 'application/json'){
+       res.writeHead(400,{'Content-Type':'application/json'});
+       res.end(JSON.stringify({message:'Content-Type must be application/json'}));
+       return false;
+    }
+    return true;
+}
+
 
 const server = http.createServer((req,res)=>{
+
+    logger(req,res);
+    if(!jsonMiddlewware(req,res))return;
+
    //GET
   if(req.url === '/api/tasks' && req.method === 'GET'){
      
