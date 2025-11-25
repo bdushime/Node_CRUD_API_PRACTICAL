@@ -9,6 +9,40 @@ function logger(req,res){
  console.log(`${req.method} ${req.url} --${new Date().toISOString()}`)
 }
 
+function validateTask(req,res,callback){
+    let body='';
+
+    req.on('data',(chunk)=>{
+        body +=chunk.toString();
+    })
+
+    req.on('end',()=>{
+        let task = JSON.parse(body);
+        try{
+          
+        if(!task.id || typeof task.id !== 'number'){
+            return sendError(res,400,'id must be a number')
+        }
+        if(!task.task || typeof task.task !== 'string'){
+             return sendError(res,400,'task must be a string')
+        }
+        if(!['todo','doing','done'].includes(task.status)){
+             return sendError(res,400,'status must be todo,doing,done')
+        }
+        callback(task)
+        }catch(err){
+           return sendError(res,400,'INVALID JSON format')
+        }
+    })
+
+}
+
+//error
+function sendError(res, statusCode, message) {
+    res.writeHead(statusCode, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: message }));
+}
+
 function  jsonMiddlewware(req,res){
     if((req.method === 'POST' || req.method === 'PUT')&& 
     req.headers['Content-Type'] !== 'application/json'){
@@ -23,7 +57,7 @@ function  jsonMiddlewware(req,res){
 const server = http.createServer((req,res)=>{
 
     logger(req,res);
-    if(!jsonMiddlewware(req,res))return;
+    // if(!jsonMiddlewware(req,res))return;
 
    //GET
   if(req.url === '/api/tasks' && req.method === 'GET'){
@@ -43,44 +77,62 @@ const server = http.createServer((req,res)=>{
 
 
    //POST
+//    else if(req.url.startsWith('/api/tasks') && req.method === 'POST'){
+//      const id = parseInt(req.url.split('/')[3]);
+//      let body='';
 
-   else if(req.url.startsWith('/api/tasks') && req.method === 'POST'){
-     const id = parseInt(req.url.split('/')[3]);
-     let body='';
-
-      req.on('data',(chunk)=>{
-            body +=chunk.toString();   
-        })
+//       req.on('data',(chunk)=>{
+//             body +=chunk.toString();   
+//         })
 
 
-       req.on('end',()=>{
-            let task = JSON.parse(body);
+//        req.on('end',()=>{
+//             let task = JSON.parse(body);
 
-        fs.readFile('./task.json','utf-8',(err,data)=>{
-        if(err){
-            res.writeHead(404,{'Content-Type':'application/json'});
-            res.end(JSON.stringify({message:'file not found'}))
-        }
+//         fs.readFile('./task.json','utf-8',(err,data)=>{
+//         if(err){
+//             res.writeHead(404,{'Content-Type':'application/json'});
+//             res.end(JSON.stringify({message:'file not found'}))
+//         }
 
-        let tasks = JSON.parse(data);
-        tasks.push(task);
+//         let tasks = JSON.parse(data);
+//         tasks.push(task);
          
-        fs.writeFile('./task.json',JSON.stringify(tasks,null,2),(err)=>{
-             if(err){
-            res.writeHead(404,{'Content-Type':'application/json'});
-            res.end(JSON.stringify({message:'file not found'}))
-             }
-            res.writeHead(200,{'Content-Type':'application/json'});
-            res.end(JSON.stringify({message:'task added',tasks}))    
+//         fs.writeFile('./task.json',JSON.stringify(tasks,null,2),(err)=>{
+//              if(err){
+//             res.writeHead(404,{'Content-Type':'application/json'});
+//             res.end(JSON.stringify({message:'file not found'}))
+//              }
+//             res.writeHead(200,{'Content-Type':'application/json'});
+//             res.end(JSON.stringify({message:'task added',tasks}))    
              
-        })
+//         })
       
-     })
-        }) 
+//      })
+//         }) 
 
 
    
-   } 
+//    } 
+  
+   else if (req.url === '/api/tasks' && req.method === 'POST') {
+        validateTask(req, res, (task) => {
+            fs.readFile('./task.json', 'utf-8', (err, data) => {
+                const tasks = err ? [] : JSON.parse(data);
+                tasks.push(task);
+
+                fs.writeFile('./task.json', JSON.stringify(tasks, null, 2), () => {
+                    res.writeHead(201, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ message: 'task added', tasks }));
+                });
+            });
+        });
+    }
+
+
+
+
+
 
    //PUT
    else if(req.url.startsWith('/api/tasks/') && req.method==='PUT'){
