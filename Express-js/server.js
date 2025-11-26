@@ -11,6 +11,10 @@ const port = process.env.PORT || 8000;
 
 const app = express();
 
+app.use((req,res,next)=>{
+    console.log(`Request: ${req.method}  ${req.url} -- ${new Date().toISOString()}`)
+})
+
 //Body parser middleware
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
