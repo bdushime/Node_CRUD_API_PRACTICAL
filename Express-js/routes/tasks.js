@@ -63,7 +63,7 @@ router.put('/:id',(req,res)=>{
 
          fs.writeFile('./routes/task.json',JSON.stringify(tasks,null,2),(err)=>{
             if(err) return res.status(404).json({message:'File not found'});
-            res.status(200).json({message:'task updted successfully'})
+            res.status(200).json({message:'task updted successfully',tasks})
          })
     })
 })
