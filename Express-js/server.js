@@ -12,8 +12,20 @@ const port = process.env.PORT || 8000;
 const app = express();
 
 app.use((req,res,next)=>{
-    console.log(`Request: ${req.method}  ${req.url} -- ${new Date().toISOString()}`)
+    console.log(`Request: ${req.method} ${req.url} --${new Date().toISOString()}`);
     next();
+})
+
+
+app.use((req,res,next)=>{
+    const start = Date.now();
+
+    req.on('finish',()=>{
+        const duration = Date.now() - start;
+
+        console.log(`Request: ${req.method} ${req.url} --${duration}`)
+    })
+    next()
 })
 
 //Body parser middleware
