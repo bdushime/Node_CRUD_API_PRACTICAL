@@ -11,21 +11,30 @@ const port = process.env.PORT || 8000;
 
 const app = express();
 
-app.use((req,res,next)=>{
-    console.log(`Request: ${req.method} ${req.url} --${new Date().toISOString()}`);
-    next();
-})
+// app.use((req,res,next)=>{
+//     console.log(`Request: ${req.method} ${req.url} --${new Date().toISOString()}`);
+//     next();
+// })
 
 
 app.use((req,res,next)=>{
     const start = Date.now();
 
-    req.on('finish',()=>{
+    res.on('finish',()=>{
         const duration = Date.now() - start;
 
-        console.log(`Request: ${req.method} ${req.url} --${duration}`)
+        console.log(`Request: ${req.method} ${req.url}  --Time: ${duration}`)
     })
     next()
+})
+
+
+app.use((req,res)=>{
+    const hour = new Date().getHours();
+    if(hour >= 0){
+       return res.status(403).json({message:'System closed. Try again tomorrow'})
+    }
+    next();
 })
 
 //Body parser middleware
