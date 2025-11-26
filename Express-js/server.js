@@ -11,9 +11,32 @@ const port = process.env.PORT || 8000;
 
 const app = express();
 
+// app.use((req,res,next)=>{
+//     console.log(`Request: ${req.method} ${req.url} --${new Date().toISOString()}`);
+//     next();
+// })
+
+// app.use(express.static());
+
 app.use((req,res,next)=>{
-    console.log(`Request: ${req.method}  ${req.url} -- ${new Date().toISOString()}`)
+    const start = Date.now();
+
+    res.on('finish',()=>{
+        const duration = Date.now() - start;
+
+        console.log(`Request: ${req.method} ${req.url}  --Time: ${duration}`)
+    })
+    next()
 })
+
+
+// app.use((req,res,next)=>{
+//     const hour = new Date().getHours();
+//     if(hour >= 0){
+//        return res.status(403).json({message:'System closed. Try again tomorrow'})
+//     }
+//     next();
+// })
 
 //Body parser middleware
 app.use(express.json());

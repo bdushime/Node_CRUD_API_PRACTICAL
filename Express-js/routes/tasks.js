@@ -4,6 +4,25 @@ import fs from 'fs'
 const router = express.Router();
 
 
+let count =0;
+
+//count middleware
+router.use((req,res,next)=>{
+ count++;
+ console.log(`Tasks router called ${count} times`);
+ next();
+})
+
+
+
+
+// router.use((req,res,next)=>{
+//     const hour = new Date().getHours();
+//     if(hour >= 0){
+//        return res.status(403).json({message:'System closed. Try again tomorrow'})
+//     }
+//     next();
+// })
 
 
 //Get all tasks
