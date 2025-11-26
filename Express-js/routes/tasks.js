@@ -50,5 +50,23 @@ router.post('/',(req,res)=>{
     })
 })
 
+//PUT
+router.put('/:id',(req,res)=>{
+    const id = parseInt(req.params.id);
+    const updatedTask = req.body;
+    fs.readFile('/routes/task.json',(err,data)=>{
+        if(err) return res.status(404).json({message:'file not found'})
+        const tasks = JSON.parse(data);
+         const index = tasks.findIndex(t=>t.id === id);
+
+         tasks[index] = {...tasks[index],...updatedTask};
+
+         fs.writeFile('/routes/task.json',JSON.stringify(tasks,null,2),(err)=>{
+            if(err) return res.status(404).json({message:'File not found'});
+            res.status(200).json({message:'task updted successfully'})
+         })
+    })
+})
+
 
 export default router;
