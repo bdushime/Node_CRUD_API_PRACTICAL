@@ -28,8 +28,26 @@ router.get('/:id',(req,res)=>{
 })
 
 //POST 
-router.post('./routes/task.json',(err,data)=>{
-    const newTask = re
+router.post('/',(req,res)=>{
+    const newTask = {
+        id:req.body.id,
+        task:req.body.task,
+        status: req.body.status
+    }
+
+    fs.readFile('./routes/task.json',(err,data)=>{
+      if(err){
+         return res.status(404).json({message:'File not found'})
+      }
+      const tasks = JSON.parse(data);
+      tasks.push(newTask);
+
+      fs.writeFile('./routes/task.json',JSON.stringify(tasks,2,null),(err)=>{
+        if(err) return res.status(404).json({message:'file not found'})
+           res.status(200).json({message:'task added successfully',tasks}) 
+      })
+     
+    })
 })
 
 
