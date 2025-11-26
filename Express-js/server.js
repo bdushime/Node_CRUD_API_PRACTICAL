@@ -16,6 +16,7 @@ const app = express();
 //     next();
 // })
 
+// app.use(express.static());
 
 app.use((req,res,next)=>{
     const start = Date.now();

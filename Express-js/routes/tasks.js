@@ -6,6 +6,7 @@ const router = express.Router();
 
 let count =0;
 
+//count middleware
 router.use((req,res,next)=>{
  count++;
  console.log(`Tasks router called ${count} times`);
