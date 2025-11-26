@@ -23,15 +23,5 @@
     "id": 5,
     "task": "fish",
     "status": "Eat supper"
-  },
-  {
-    "id": 6,
-    "task": "MOney",
-    "status": "todo"
-  },
-  {
-    "id": 7,
-    "task": "coding",
-    "status": "doing"
   }
 ]
