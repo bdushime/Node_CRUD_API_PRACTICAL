@@ -6,6 +6,15 @@ const router = express.Router();
 
 
 
+router.use((req,res,next)=>{
+    const hour = new Date().getHours();
+    if(hour >= 0){
+       return res.status(403).json({message:'System closed. Try again tomorrow'})
+    }
+    next();
+})
+
+
 //Get all tasks
 router.get('/',(req,res)=>{
     fs.readFile('./routes/task.json',(err,data)=>{

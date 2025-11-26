@@ -29,7 +29,7 @@ app.use((req,res,next)=>{
 })
 
 
-app.use((req,res)=>{
+app.use((req,res,next)=>{
     const hour = new Date().getHours();
     if(hour >= 0){
        return res.status(403).json({message:'System closed. Try again tomorrow'})
