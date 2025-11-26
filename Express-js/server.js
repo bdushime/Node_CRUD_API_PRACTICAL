@@ -1,6 +1,7 @@
 import express from'express';
 import path from 'path';
 import posts from './routes/posts.js'
+import users from './routes/users.js'
 
 const port = process.env.PORT || 8000;
 
@@ -31,6 +32,7 @@ app.use(express.urlencoded({extended: false}));
 //Routes
 app.use('/api/posts',posts);
 
+app.use('/api/users',users);
 
 
 
