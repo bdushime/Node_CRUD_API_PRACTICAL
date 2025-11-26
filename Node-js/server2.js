@@ -27,6 +27,7 @@ const server = http.createServer((req,res)=>{
          res.end(JSON.stringify(user))
          
     }
+    
     else if(req.url === '/api/users' && req.method === 'POST'){
         let body=''
 
@@ -76,6 +77,8 @@ const server = http.createServer((req,res)=>{
     }
 })
 
+  
+ 
 
 server.listen(PORT,()=>{
     console.log(`server running at ${PORT}`)
