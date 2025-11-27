@@ -28,5 +28,10 @@
     "id": 6,
     "task": "MOney",
     "status": "todo"
+  },
+  {
+    "id": 7,
+    "task": "coding practice",
+    "status": "doing"
   }
 ]
